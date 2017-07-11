@@ -43,7 +43,7 @@ function draw(i, color) {
 	ctx.beginPath();
 	ctx.moveTo(0, mat[0][i]);
 	for (var j = 1; j < L; j++)
-		ctx.lineTo(j * h, mat[j][i]);	
+	ctx.lineTo(j * h, mat[j][i]);	
 	ctx.lineTo((L - 1) * h, 0);
 	ctx.lineTo(0, 0);
 	ctx.fillStyle = color;
