@@ -13,42 +13,6 @@ for (var k = 0; k < N; k++){//临接矩阵
 		mat[k][j] = 0;       
 	}
 }
-
-canvas.onmousedown = function(ev) {  
-    var e = ev||event;     
-    var x = e.clientX;      
-    var y = e.clientY;  
-    drag(x,y);  
-};
-
-function drag(x, y) { 
-	if(collision(ctx.getImageData(x, y, 0.1, 0.1))) {
-		canvas.onmousemove = function(ev) {  
-		var e = ev || event;  
-		var ax = e.clientX;  
-		var ay = e.clientY;  
-		//鼠标移动每一帧都清楚画布内容，然后重新画圆
-		nodeList[5].x = ax;
-		nodeList[5].y = ay;
-		//ctx.clearRect(0, 0, 1000, 1000);
-		loop(); 
-    };  
-    //鼠标移开事件  
-    canvas.onmouseup = function() { 
-		canvas.onmousemove = null;  
-		canvas.onmouseup = null;  
-        };  
-    };  
-}  
-function collision(ImageData) {
-	var wdata;
-    wdata = ImageData.data;
-    for (var wy = 0; wy < wdata.length; wy++) {         
-        if (wdata[wy]) {return true;}   
-    };
-    return false;
-};
-	
 	
 	
 function Node(x, y) {
@@ -62,6 +26,7 @@ function Node(x, y) {
 	}
 	return node;
 }
+
 function Edge(x1, y1, x2, y2) {
 	var edge = new Object;
 	edge.x1 = x1;
@@ -92,7 +57,6 @@ function generateGraph() {//生成图
 }
 
 function drawGraph() {
-	generateGraph();
 	for(var i = 0; i < edgeList.length; i++){
 		ctx.beginPath();
 		ctx.moveTo(nodeList[edgeList[i][0]].x, nodeList[edgeList[i][0]].y);
@@ -108,14 +72,23 @@ function drawGraph() {
 	}
 }
 
-function refresh() {
-	ctx.clearRect(0, 0, 1000, 1000);
+generateGraph();
+drawGraph();
+console.log(nodeList);
+//function refresh() {
+while (1) {
+ 	ctx.clearRect(0, 0, 1000, 1000);
+	//记录此时的各个点的坐标
+	var flag = 1;
+	
 	//弹簧力是吸引力
 	//遍历每一条edge，给edge的两端的点都添加吸引力
 	for(var i = 0; i < edgeList.length; i++){//更新点的x y坐标
 		var xyAtt = calAttraction(edgeList[i][0], edgeList[i][1]);
 		nodeList[edgeList[i][0]].add(xyAtt[0], xyAtt[1]);
 		nodeList[edgeList[i][1]].add(-xyAtt[0], -xyAtt[1]);		
+		console.log(Math.sqrt(xyAtt[0] * xyAtt[0] + xyAtt[1] * xyAtt[1]));
+		if (Math.sqrt(xyAtt[0] * xyAtt[0] + xyAtt[1] * xyAtt[1]) > 8) flag = 0;
 	}
 	//库仑力是排斥力
 	//遍历除了自己以外的所有点
@@ -123,11 +96,14 @@ function refresh() {
 		for(var j = i + 1; j < N; j++){
 			var xyRep = calRepulsion(i, j);
 			nodeList[i].add(xyRep[0], xyRep[1]);
-			nodeList[j].add(-xyRep[0], -xyRep[1]);		
+			nodeList[j].add(-xyRep[0], -xyRep[1]);			
 		}
 	}
 	drawGraph();
+	
+	if (flag) break;
 }
+//}
 
 function calRepulsion(i, j) {//计算出来的是i的
 	var dis2, xDis, yDis, fRep, dx, dy;
@@ -149,11 +125,4 @@ function calAttraction(i, j) {//计算出来的是i的
 	dy = -fAtt * yDis / Math.sqrt(dis2) * step;
 	return [dx, dy];//返回给i点的 带符号的 分别两个方向上的位移。//这一步语法可能有问题
 }
-drawGraph();
-
-
-function loop() {
-	setInterval(refresh, 1000 / 60);
-}
-loop();
 
