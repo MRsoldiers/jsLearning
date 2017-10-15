@@ -236,7 +236,7 @@ function update(id, bool) {
 		//先验证只相交一种的情况
 		$("line").remove();
 		$("circle").remove();
-		$("text").remove();
+		$("text").remove(); 
 		console.log(otherRange);
 		var yRangeOrigin0 = yRange[0];
 		var yRangeOrigin1 = yRange[1];
