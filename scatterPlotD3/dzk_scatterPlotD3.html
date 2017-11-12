@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<style>
+	.cell text {
+	  font-weight: bold;
+	  text-transform: capitalize;
+	}
+	.frame {
+		fill:none;
+		stroke-width:1;
+		stroke:rgb(0,0,0)
+	}
+	circle {
+	  fill-opacity: .7;
+	}
+	
+	circle.hidden {
+	  fill: #ccc !important;
+	}
+	</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <script src="d3.min.js"></script>
+    <script src="iris.json"></script>
+</head>
+<body>
+    <svg width="800" height="800"></svg>
+    <script src="scatterPlotD3.js"></script>
+</body>
+</html>
